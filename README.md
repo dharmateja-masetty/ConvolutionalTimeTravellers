@@ -1,164 +1,112 @@
-# Template Repo for ML Project
+# ds-modeling-pipeline
 
-This template repo will give you a good starting point for your second project. Besides the files used for creating a virtual environment, you will find a simple example of how to build a simple model in a python script. This is maybe the simplest way to do it. We train a simple model in the jupyter notebook, where we select only some features and do minimal cleaning. The output is then stored in simple python scripts.
+Here you find a Skeleton project for building a simple model in a python script or notebook and log the results on MLFlow.
 
-The data used for this is: [coffee quality dataset](https://github.com/jldbc/coffee-quality-database).
+There are two ways to do it: 
+* In Jupyter Notebooks:
+    We train a simple model in the [jupyter notebook](notebooks/EDA-and-modeling.ipynb), where we select only some features and do minimal cleaning. The hyperparameters of feature engineering and modeling will be logged with MLflow
 
----
+* With Python scripts:
+    The [main script](modeling/train.py) will go through exactly the same process as the jupyter notebook and also log the hyperparameters with MLflow
 
-## Set up a Kanban board on github
+Data used is the [coffee quality dataset](https://github.com/jldbc/coffee-quality-database).
 
-Go to ML-Project Template.
+## Requirements:
 
-1. Click on "Use this Template" (Blue button)
-![alt text](./images/step_1a_new.png)
+- pyenv with Python: 3.9.4
 
-2. Create new repository with relevant name, the owner should be your own account and **not** Spiced. 
-![alt text](./images/step_2_new.png)
+### Setup
 
-3. In your newly create repo, navigate to "Projects", and then click on "Link a project" (blue button). Normally you don't have created a project yet, so you can click the arrow navigation to create project on your profile. This project can be added at the end to your repository.
-![alt text](./images/add_project_new.png)
+Use the requirements file in this repo to create a new environment.
 
+```BASH
+make setup
 
-4.  You will be guided to your profiles projects and it will be shown a create project window. Choose "board" view and **not** "table" view.
- ![alt text](./images/choose_board.png)
-5. Now change the name of your board, to match that of your chosen ML project. Then click "Create project" blue button. Great you create Kanban Board
-![alt text](./images/create_project_new.png)
+#or
 
-6. Next, assign rights to all your team members by clicking on the 3 dots on the top right of the board, and then go to "Settings".
-![alt text](./images/kanban_settings.png)
+pyenv local 3.11.3
+python -m venv .venv
+source .venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements_dev.txt
+```
 
+The `requirements.txt` file contains the libraries needed for deployment.. of model or dashboard .. thus no jupyter or other libs used during development.
 
-7. Next, click on "Manage Access". Add your team mates by Searching for their github handle in the search window.Change their Role from ‘Write’ to ‘Admin’. Click on the blue button “Invite” to add them. Repeat for all team members.
-![alt text](./images/team_access_new.png
-)
+The MLFLOW URI should **not be stored on git**, you have two options, to save it locally in the `.mlflow_uri` file:
 
-8. Next,go back to the kanban board and at the bottom  add action items with the relevant name e.g. “load data”, "get statistics", etc.
-![alt text](./images/load_data_item.png
-)
+```BASH
+echo http://127.0.0.1:5000/ > .mlflow_uri
+```
 
+This will create a local file where the uri is stored which will not be added on github (`.mlflow_uri` is in the `.gitignore` file). Alternatively you can export it as an environment variable with
 
-9. Convert added item to issue by clicking on the 3 dots on the particular added item.
-![alt text](./images/convert_to_issue.png
-)
+```bash
+export MLFLOW_URI=http://127.0.0.1:5000/
+```
 
-10. Then select the repo you created  for the issue to be added. (Select the project repo example “my-project-name”)
-![alt text](./images/select_repo.png
-)
+This links to your local mlflow, if you want to use a different one, then change the set uri.
 
-11. When in project repo, Go to issues, then go to milestones. 
-![alt text](./images/to_milestones.png
-)
+The code in the [config.py](modeling/config.py) will try to read it locally and if the file doesn't exist will look in the env var.. IF that is not set the URI will be empty in your code.
 
-12. Click on ”New milestone”.
-
-13. Give the milestone a due date and description as per the example provided by the coaches. Add description of: 
-
-    A) What needs to be completed to be done with the milestone
-
-    B) The definition of done: what will your result look like when you have completed the milestone? (check the provided format)
-![alt text](./images/new_milestone.png)
-
-14. Now navigate to "issues".
-
-15. Assign issues to milestones 
-![alt text](./images/milestone_to_issue_new.png)
-
-16. Give it assignees (people who will work on the task). 
-![alt text](./images/milestone_to_someone.png)
-
-### Optional: Add workflows
-
-Workflows can help you keep your kanban board automatically on track. 
-
-Select the project created in the steps above.  
-
-Click on the 3 dots to the far right of the board (...)
-
-Select workflow as the first option. 
-
-Activate the ones you feel necessary to your project
-
-Go back to your project repository (fraud detection))
-
-## Set up your Environment
-
-
-
-### **`macOS`** type the following commands : 
-
-
-
-- For installing the virtual environment and the required package you can either follow the commands:
-
-    ```BASH
-    pyenv local 3.11.3
-    python -m venv .venv
-    source .venv/bin/activate
-    pip install --upgrade pip
-    pip install -r requirements.txt
-    ```
-Or ....
--  use the [Makefile](Makefile) and run `make setup` or install it manually with the following commands:
-
-     ```BASH
-    make setup
-    ```
-    After that active your environment by following commands:
-    ```BASH
-    source .venv/bin/activate
-    ```
-
-### **`WindowsOS`** type the following commands :
-
-- Install the virtual environment and the required packages by following commands.
-
-   For `PowerShell` CLI :
-
-    ```PowerShell
-    pyenv local 3.11.3
-    python -m venv .venv
-    .venv\Scripts\Activate.ps1
-    pip install --upgrade pip
-    pip install -r requirements.txt
-    ```
-
-    For `Git-bash` CLI :
-  
-    ```BASH
-    pyenv local 3.11.3
-    python -m venv .venv
-    source .venv/Scripts/activate
-    pip install --upgrade pip
-    pip install -r requirements.txt
-    ```
-
-    **`Note:`**
-    If you encounter an error when trying to run `pip install --upgrade pip`, try using the following command:
-    ```Bash
-    python.exe -m pip install --upgrade pip
-    ```
-
-
-   
 ## Usage
+
+### Creating an MLFlow experiment
+
+You can do it via the GUI or via [command line](https://www.mlflow.org/docs/latest/tracking.html#managing-experiments-and-runs-with-the-tracking-service-api) if you use the local mlflow:
+
+```bash
+mlflow experiments create --experiment-name 0-template-ds-modeling
+```
+
+Check your local mlflow
+
+```bash
+mlflow ui
+```
+
+and open the link [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+This will throw an error if the experiment already exists. **Save the experiment name in the [config file](modeling/config.py).**
 
 In order to train the model and store test data in the data folder and the model in models run:
 
-**`Note`**: Make sure your environment is activated.
-
 ```bash
-python example_files/train.py  
+#activate env
+source .venv/bin/activate
+
+python -m modeling.train
 ```
 
 In order to test that predict works on a test set you created run:
 
 ```bash
-python example_files/predict.py models/linear_regression_model.sav data/X_test.csv data/y_test.csv
+python modeling/predict.py models/linear data/X_test.csv data/y_test.csv
 ```
 
-## Limitations
+## About MLFLOW -- delete this when using the template
 
-Development libraries are part of the production environment, normally these would be separate as the production code should be as slim as possible.
+MLFlow is a tool for tracking ML experiments. You can run it locally or remotely. It stores all the information about experiments in a database.
+And you can see the overview via the GUI or access it via APIs. Sending data to mlflow is done via APIs. And with mlflow you can also store models on S3 where you version them and tag them as production for serving them in production.
+![mlflow workflow](images/0_general_tracking_mlflow.png)
 
+### MLFlow GUI
 
+You can group model trainings in experiments. The granularity of what an experiment is up to your usecase. Recommended is to have an experiment per data product, as for all the runs in an experiment you can compare the results.
+![gui](images/1_gui.png)
+
+### Code to send data to MLFlow
+
+In order to send data about your model you need to set the connection information, via the tracking uri and also the experiment name (otherwise the default one is used). One run represents a model, and all the rest is metadata. For example if you want to save train MSE, test MSE and validation MSE you need to name them as 3 different metrics.
+If you are doing CV you can set the tracking as nested.
+![mlflow code](images/2_code.png)
+
+### MLFlow metadata
+
+There is no constraint between runs to have the same metadata tracked. I.e. for one run you can track different tags, different metrics, and different parameters (in cv some parameters might not exist for some runs so this .. makes sense to be flexible).
+
+- tags can be anything you want.. like if you do CV you might want to tag the best model as "best"
+- params are perfect for hypermeters and also for information about the data pipeline you use, if you scaling vs normalization and so on
+- metrics.. should be numeric values as these can get plotted
+
+![mlflow metadata](images/3_metadata.png)

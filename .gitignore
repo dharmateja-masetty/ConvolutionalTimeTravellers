@@ -129,11 +129,10 @@ dmypy.json
 .pyre/
 
 
-# Mac Stuff
-.DS_Store
+data/*.csv
+models/*.sav
+mlruns
+models/*
 
-# vscode Stuff
-.vscode
-
-# Data 
-data/
+#config file has sensitive data
+.mlflow_uri
